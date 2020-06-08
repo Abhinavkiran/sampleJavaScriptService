@@ -1,7 +1,8 @@
 var express = require('express');
 var app = express();
 const bodyParser = require('body-parser');
-var con= require('./db_connection');
+//var con= require('./db_connection');
+var controlOperations=require('./MicroGetController.js');
 var url = require('url');
 var GetJsonData;
 //app.use(bodyParser.urlencoded({ extended: true }));	
@@ -22,20 +23,24 @@ app.use(function(req, res, next){
 
 //Route handler
 app.get('/userdetails', function(req, res, next){
-   var sql = "select * from userDetails";
+   /**var sql = "select * from userDetails";
     con.connection.query(sql, function (err, result) {
 	  GetJsonData=JSON.stringify(result);
     if (err) throw err;
     console.log("query executed");
-	console.log("query executed1");
   });
    res.header("Content-Type", "application/json");
-   res.send(GetJsonData);
+   res.send(GetJsonData);*/
+   var responseOfGet=controlOperations.Fetch();
+   res.header("Content-Type", "application/json");
+   res.send(responseOfGet);
    next();
 });
 
 //Route handler
-app.post('/create',(req, res) => {
+
+app.post('/create',(req, res) => { 
+
    console.log(req.body);
    var sql="INSERT INTO userDetails (firstname, lastname, email, phone) VALUES ?";
    var requestJsonBody= req.body;
@@ -51,10 +56,13 @@ if(requestJsonBody.firstname && requestJsonBody.lastname && requestJsonBody.emai
   });
 }
 else{
-	res.send('Please Insert post data in request payload');
+	//res.send('Please Insert post data in request payload');
+	res.status(400).end('Please give right request');
 }
+
 })
 
+	
 app.delete('/del_user', function (req, res) {
 	console.log("Got a DELETE request for /del_user");
    //res.send('Hello DELETE');

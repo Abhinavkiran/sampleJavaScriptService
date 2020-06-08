@@ -14,7 +14,7 @@ var connection = mysql.createConnection({
   database: "mydb"
 });
 
-function create_db(){
+function create_db(createTableQuery,Values){
 	
 }
 
